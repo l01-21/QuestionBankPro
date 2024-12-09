@@ -3,3 +3,10 @@ spring:
     name: qbp
   profiles:
     active: dev
+
+
+
+secure:
+  ignored:
+    urls:
+      - /register

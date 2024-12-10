@@ -69,7 +69,10 @@ public class User implements Serializable {
     /**
      * 状态（0：启用，1：禁用，2：注销）
      */
-    private Boolean status;
+    private Integer status;
 
-
+    /**
+     * 删除标志（0：代表存在，2：代表删除）
+     */
+    private Integer delFlag;
 }

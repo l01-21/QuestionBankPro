@@ -9,4 +9,10 @@ public class CacheConstants {
      */
     public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
 
+
+    /**
+     * 登录令牌 redis key
+     */
+    public static final String LOGIN_TOKEN_KEY = "login_token:";
+
 }

@@ -1,12 +1,15 @@
 package com.qbp.service.impl;
 
 import com.qbp.constant.UserConstants;
+import com.qbp.model.entity.Menu;
+import com.qbp.model.entity.Resource;
 import com.qbp.model.entity.User;
 import com.qbp.mapper.UserMapper;
 import com.qbp.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 用户表 服务实现类
@@ -21,5 +24,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean checkUserNameUnique(User user) {
         User info = baseMapper.checkUserNameUnique(user.getUsername());
         return info != null ? UserConstants.NOT_UNIQUE : UserConstants.UNIQUE;
+    }
+
+    @Override
+    public List<Menu> getMenus(Long id) {
+        return baseMapper.getMenus(id);
+    }
+
+    @Override
+    public List<Resource> getResources(Long id) {
+        return baseMapper.getResources(id);
     }
 }

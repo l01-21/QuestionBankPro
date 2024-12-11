@@ -23,17 +23,7 @@ public interface UserMapper extends BaseMapper<User> {
      */
     User checkUserNameUnique(String username);
 
-    /**
-     * 根据用户id获取菜单
-     * @param id 用户id
-     * @return 菜单列表
-     */
-    List<Menu> getMenus(Long id);
 
-    /**
-     * 根据用户id获取资源
-     * @param id 用户id
-     * @return 资源列表
-     */
-    List<Resource> getResources(Long id);
+
+
 }

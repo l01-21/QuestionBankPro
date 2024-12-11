@@ -3,6 +3,7 @@ package com.qbp.filter;
 import com.qbp.constant.HttpStatus;
 import com.qbp.model.entity.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,20 +17,20 @@ import java.util.regex.Pattern;
  */
 @Component
 public class PermissionInterceptor implements HandlerInterceptor {
+    @javax.annotation.Resource
+    private AntPathMatcher antPathMatcher;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("权限拦截");
         // 获取当前的路径
-        String currentPath = (String) request.getAttribute("resource");
+        String currentPath = request.getRequestURI();
         // 判断当前用户是否用于权限
         List<Resource> resources= (List<Resource>) request.getAttribute("resource");
         // 判断当前用户路径是否包含当前路径
         // 遍历资源列表，使用正则表达式匹配路径
         for (Resource resource : resources) {
             String regex = resource.getUrl();
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(currentPath);
-            if (matcher.matches()) {
+            if (antPathMatcher.match(regex, currentPath)) {
                 // 匹配成功，放行
                 return true;
             }

@@ -1,7 +1,10 @@
 package com.qbp.service;
 
 import com.qbp.model.dto.RegisterDTO;
+import com.qbp.model.vo.MenuTreeVO;
 import com.qbp.model.vo.Result;
+
+import java.util.List;
 
 /**
  * 系统服务接口
@@ -29,4 +32,11 @@ public interface SystemService {
      * @return token
      */
     String login(String username, String password, String code, String uuid);
+
+    /**
+     * 获取菜单树
+     *
+     * @return 菜单树
+     */
+    List<MenuTreeVO> getMenuTree();
 }

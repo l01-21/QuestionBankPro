@@ -26,13 +26,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return info != null ? UserConstants.NOT_UNIQUE : UserConstants.UNIQUE;
     }
 
-    @Override
-    public List<Menu> getMenus(Long id) {
-        return baseMapper.getMenus(id);
-    }
 
-    @Override
-    public List<Resource> getResources(Long id) {
-        return baseMapper.getResources(id);
-    }
 }

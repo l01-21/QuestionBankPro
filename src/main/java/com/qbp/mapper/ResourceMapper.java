@@ -3,6 +3,8 @@ package com.qbp.mapper;
 import com.qbp.model.entity.Resource;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * 权限资源表 Mapper 接口
  *
@@ -10,5 +12,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2024-12-09
  */
 public interface ResourceMapper extends BaseMapper<Resource> {
-
+    /**
+     * 根据用户id获取资源
+     * @param id 用户id
+     * @return 资源列表
+     */
+    List<Resource> getResources(Long id);
 }

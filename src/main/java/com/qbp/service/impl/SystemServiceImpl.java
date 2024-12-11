@@ -4,15 +4,21 @@ import com.google.code.kaptcha.Producer;
 import com.qbp.constant.CacheConstants;
 import com.qbp.constant.Constants;
 import com.qbp.constant.UserConstants;
+import com.qbp.context.UserContext;
 import com.qbp.enums.UserStatus;
 import com.qbp.exception.Asserts;
 import com.qbp.model.dto.RegisterDTO;
+import com.qbp.model.entity.Menu;
 import com.qbp.model.entity.User;
 import com.qbp.model.vo.LoginVO;
+import com.qbp.model.vo.MenuTreeVO;
 import com.qbp.model.vo.Result;
+import com.qbp.service.MenuService;
+import com.qbp.service.ResourceService;
 import com.qbp.service.SystemService;
 import com.qbp.service.UserService;
 import com.qbp.utils.RedisCacheUtils;
+import com.qbp.utils.TreeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +29,9 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +44,10 @@ public class SystemServiceImpl implements SystemService {
     private RedisCacheUtils redisCacheUtils;
     @Resource
     private UserService userService;
+    @Resource
+    private MenuService menuService;
+    @Resource
+    private ResourceService resourceService;
     @Resource
     private PasswordEncoder passwordEncoder;
     @Resource(name = "captchaProducer")
@@ -118,10 +130,33 @@ public class SystemServiceImpl implements SystemService {
         LoginVO loginVO = new LoginVO();
         BeanUtils.copyProperties(user, loginVO);
         // 设置菜单
-        loginVO.setMenus(userService.getMenus(user.getId()));
+        loginVO.setMenus(menuService.getMenus(user.getId()));
         // 设置权限
-        loginVO.setResources(userService.getResources(user.getId()));
+        loginVO.setResources(resourceService.getResources(user.getId()));
         return tokenService.createToken(loginVO);
+    }
+
+    @Override
+    public List<MenuTreeVO> getMenuTree() {
+        // 获取当前用户
+        Long currentUserId = UserContext.getCurrentUserId();
+        // 查询当前用户所有菜单
+        LoginVO currentUser = tokenService.getCurrentUser(currentUserId);
+        List<Menu> menus = currentUser.getMenus();
+        return TreeUtils.buildTreeWithConversion(
+                menus,
+                MenuTreeVO.class,
+                MenuTreeVO::getId,
+                MenuTreeVO::getParentId,
+                menuTreeVO -> {
+                    List<MenuTreeVO> children = menuTreeVO.getChildren();
+                    if (children == null) {
+                        children = new ArrayList<>();
+                        menuTreeVO.setChildren(children);
+                    }
+                    return children;
+                }
+        );
     }
 
     /**
@@ -158,12 +193,12 @@ public class SystemServiceImpl implements SystemService {
     private void validateCaptcha(String code, String uuid) {
         String verifyKey = CacheConstants.CAPTCHA_CODE_KEY + uuid;
         String cacheObject = redisCacheUtils.getCacheObject(verifyKey);
-        redisCacheUtils.deleteObject(verifyKey);
         if (cacheObject == null) {
-            Asserts.fail("验证码已失效");
+            Asserts.fail("验证码已失效，请重新获取验证码");
         }
-        if (!code.equalsIgnoreCase(cacheObject)) {
+        if (!cacheObject.equalsIgnoreCase(code)) {
             Asserts.fail("验证码错误");
         }
+        redisCacheUtils.deleteObject(verifyKey);
     }
 }

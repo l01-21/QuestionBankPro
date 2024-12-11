@@ -1,8 +1,6 @@
 package com.qbp.utils;
 
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +18,8 @@ public class RedisCacheUtils {
 
     /**
      * 缓存 递增
-     * @param key 键
+     *
+     * @param key   键
      * @param delta 递增步长
      */
     public Long increment(String key, long delta) {
@@ -29,9 +28,10 @@ public class RedisCacheUtils {
 
     /**
      * 缓存基本对象，Integer、String、实体类等
-     * @param key 键
+     *
+     * @param key   键
      * @param value 值
-     * @param <T> 值类型
+     * @param <T>   值类型
      */
     public <T> void setCacheObject(String key, T value) {
         redisTemplate.opsForValue().set(key, value);
@@ -39,11 +39,12 @@ public class RedisCacheUtils {
 
     /**
      * 缓存基本对象，Integer、String、实体类等
-     * @param key 键
-     * @param value 值
-     * @param timeout 时间
+     *
+     * @param key      键
+     * @param value    值
+     * @param timeout  时间
      * @param timeUnit 时间颗粒度
-     * @param <T> 值类型
+     * @param <T>      值类型
      */
     public <T> void setCacheObject(String key, T value, Long timeout, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
@@ -93,6 +94,33 @@ public class RedisCacheUtils {
     }
 
     /**
+     * 根据前缀获取值
+     *
+     * @param prefix 键
+     */
+    public <T> T getPrefixKey(String prefix) {
+        Set keys = redisTemplate.keys(prefix);
+        if (!keys.isEmpty()) {
+            String key = keys.iterator().next().toString();
+            return getCacheObject(key);
+        }
+        return null;
+    }
+
+    /**
+     * 根据前缀删除值
+     *
+     * @param prefix 键
+     */
+    public void delPrefixKey(String prefix) {
+        Set<String> keys = redisTemplate.keys(prefix);
+        if (!keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+    }
+
+
+    /**
      * 获得缓存的基本对象。
      *
      * @param key 缓存键值
@@ -110,6 +138,8 @@ public class RedisCacheUtils {
     public boolean deleteObject(final String key) {
         return redisTemplate.delete(key);
     }
+
+
     /**
      * 删除集合对象
      *
@@ -247,7 +277,8 @@ public class RedisCacheUtils {
 
     /**
      * 缓存set
-     * @param key 键
+     *
+     * @param key   键
      * @param value 值
      * @return true=成功 false=失败
      */

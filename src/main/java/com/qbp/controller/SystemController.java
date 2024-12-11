@@ -44,4 +44,9 @@ public class SystemController {
         result.put(Constants.TOKEN, token);
         return result;
     }
+
+    @GetMapping(value = "/getMenuTree", name = "获取菜单树")
+    public Result getMenuTree() {
+        return success(systemService.getMenuTree());
+    }
 }

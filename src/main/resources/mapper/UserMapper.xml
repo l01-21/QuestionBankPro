@@ -4,33 +4,24 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.qbp.model.entity.User">
-        <id column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="nickname" property="nickname" />
-        <result column="email" property="email" />
-        <result column="password" property="password" />
-        <result column="phone" property="phone" />
-        <result column="gender" property="gender" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="status" property="status" />
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="gender" property="gender"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="status" property="status"/>
     </resultMap>
     <select id="checkUserNameUnique" resultType="com.qbp.model.entity.User">
-        select id, username from user where username = #{username} and del_flag = 0 limit 1
-    </select>
-    <select id="getMenus" resultType="com.qbp.model.entity.Menu">
-        SELECT m.id, m.name, m.parent_id, m.web_name, m.web_icon, m.wen_path
-        FROM menu m
-                 JOIN role_menu_relation rmr ON m.id = rmr.menu_id
-                 JOIN user_role_relation urr ON rmr.role_id = urr.role_id
-        WHERE urr.user_id = #{id};
+        select id, username
+        from user
+        where username = #{username}
+          and del_flag = 0
+        limit 1
     </select>
 
-    <select id="getResources" resultType="com.qbp.model.entity.Resource">
-        SELECT r.id, r.name, r.url, r.description
-        FROM resource r
-                 JOIN role_resource_relation rrr ON r.id = rrr.resource_id
-                 JOIN user_role_relation urr ON rrr.role_id = urr.role_id
-        WHERE urr.user_id = #{id};
-</select>
+
 </mapper>

@@ -54,6 +54,7 @@ public class TokenService {
         refreshToken(user, token);
 
         Map<String, Object> claims = new HashMap<>();
+        claims.put(Constants.USER_ID, user.getId());
         claims.put(Constants.LOGIN_USER_KEY, token);
         return createToken(claims);
     }
@@ -65,7 +66,11 @@ public class TokenService {
      * @param token token
      */
     public void refreshToken(LoginVO user, String token) {
-        redisCacheUtils.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY + token, user, expireTime, TimeUnit.MINUTES);
+        // 获取user下的缓存信息
+        if (redisCacheUtils.getPrefixKey(CacheConstants.LOGIN_TOKEN_KEY + user.getId() + ":*") != null) {
+            redisCacheUtils.delPrefixKey(CacheConstants.LOGIN_TOKEN_KEY + user.getId() + ":*");
+        }
+        redisCacheUtils.setCacheObject(CacheConstants.LOGIN_TOKEN_KEY + user.getId() + ":" + token, user, expireTime, TimeUnit.MINUTES);
     }
 
     /**
@@ -92,8 +97,9 @@ public class TokenService {
             try {
                 Claims claims = parseToken(token);
                 // 解析对应的权限以及用户信息
+                long userId = Long.parseLong(claims.get(Constants.USER_ID).toString());
                 String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
-                return redisCacheUtils.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY + uuid);
+                return redisCacheUtils.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY + userId + ":" + uuid);
             } catch (Exception e) {
 
             }
@@ -107,8 +113,7 @@ public class TokenService {
      * @param token 令牌
      * @return 数据声明
      */
-    private Claims parseToken(String token)
-    {
+    private Claims parseToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
@@ -124,5 +129,17 @@ public class TokenService {
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(header);
         return token;
+    }
+
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户id
+     * @return LoginVO 用户信息
+     */
+    public LoginVO getCurrentUser(Long userId) {
+        String key = redisCacheUtils.getPrefixKey(CacheConstants.LOGIN_TOKEN_KEY + userId + ":*");
+        return redisCacheUtils.getCacheObject(key);
     }
 }

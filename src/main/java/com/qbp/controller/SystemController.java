@@ -44,9 +44,4 @@ public class SystemController {
         result.put(Constants.TOKEN, token);
         return result;
     }
-
-    @GetMapping(value = "/test", name = "测试")
-    public Result logout() {
-        return Result.success();
-    }
 }

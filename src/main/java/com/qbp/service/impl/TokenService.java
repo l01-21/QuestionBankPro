@@ -139,7 +139,6 @@ public class TokenService {
      * @return LoginVO 用户信息
      */
     public LoginVO getCurrentUser(Long userId) {
-        String key = redisCacheUtils.getPrefixKey(CacheConstants.LOGIN_TOKEN_KEY + userId + ":*");
-        return redisCacheUtils.getCacheObject(key);
+        return redisCacheUtils.getPrefixKey(CacheConstants.LOGIN_TOKEN_KEY + userId + ":*");
     }
 }

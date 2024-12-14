@@ -4,6 +4,7 @@ import com.qbp.constant.HttpStatus;
 import com.qbp.context.UserContext;
 import com.qbp.model.vo.LoginVO;
 import com.qbp.service.impl.TokenService;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,7 +21,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     private TokenService tokenService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("jwt拦截");
         LoginVO loginUser =  tokenService.getLoginUser(request);
         if (loginUser == null) {
             response.setStatus(HttpStatus.UNAUTHORIZED);

@@ -1,6 +1,5 @@
 package com.qbp.utils;
 
-import com.qbp.model.vo.MenuTreeVO;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;

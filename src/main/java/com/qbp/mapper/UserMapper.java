@@ -1,11 +1,7 @@
 package com.qbp.mapper;
 
-import com.qbp.model.entity.Menu;
-import com.qbp.model.entity.Resource;
 import com.qbp.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
-import java.util.List;
 
 /**
  * 用户表 Mapper 接口

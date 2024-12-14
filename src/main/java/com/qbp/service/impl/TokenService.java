@@ -92,16 +92,16 @@ public class TokenService {
      * @return 用户信息
      */
     public LoginVO getLoginUser(HttpServletRequest request) {
-        String token = getToken(request);
-        if (StringUtils.isNotEmpty(token)) {
+        String authorization = getToken(request);
+        if (StringUtils.isNotEmpty(authorization)) {
             try {
-                Claims claims = parseToken(token);
+                Claims claims = parseToken(authorization);
                 // 解析对应的权限以及用户信息
                 long userId = Long.parseLong(claims.get(Constants.USER_ID).toString());
-                String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
-                return redisCacheUtils.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY + userId + ":" + uuid);
+                String token = (String) claims.get(Constants.LOGIN_USER_KEY);
+                return redisCacheUtils.getCacheObject(CacheConstants.LOGIN_TOKEN_KEY + userId + ":" + token);
             } catch (Exception e) {
-
+                return null;
             }
         }
         return null;

@@ -2,6 +2,7 @@ package com.qbp.filter;
 
 import com.qbp.constant.HttpStatus;
 import com.qbp.model.entity.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,7 +22,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
     private AntPathMatcher antPathMatcher;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("权限拦截");
         // 获取当前的路径
         String currentPath = request.getRequestURI();
         // 判断当前用户是否用于权限

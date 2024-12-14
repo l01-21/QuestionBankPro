@@ -1,6 +1,5 @@
 package com.qbp.model.vo;
 
-import com.qbp.model.entity.Menu;
 import com.qbp.model.entity.Resource;
 import lombok.Data;
 
@@ -17,5 +16,4 @@ public class LoginVO {
     private Integer gender;
     private String status;
     private List<Resource> resources;
-    private List<Menu> menus;
 }

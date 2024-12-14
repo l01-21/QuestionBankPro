@@ -8,12 +8,9 @@ import com.qbp.context.UserContext;
 import com.qbp.enums.UserStatus;
 import com.qbp.exception.Asserts;
 import com.qbp.model.dto.RegisterDTO;
-import com.qbp.model.entity.Menu;
 import com.qbp.model.entity.User;
 import com.qbp.model.vo.LoginVO;
-import com.qbp.model.vo.MenuTreeVO;
 import com.qbp.model.vo.Result;
-import com.qbp.service.MenuService;
 import com.qbp.service.ResourceService;
 import com.qbp.service.SystemService;
 import com.qbp.service.UserService;
@@ -44,8 +41,6 @@ public class SystemServiceImpl implements SystemService {
     private RedisCacheUtils redisCacheUtils;
     @Resource
     private UserService userService;
-    @Resource
-    private MenuService menuService;
     @Resource
     private ResourceService resourceService;
     @Resource
@@ -129,35 +124,11 @@ public class SystemServiceImpl implements SystemService {
         }
         LoginVO loginVO = new LoginVO();
         BeanUtils.copyProperties(user, loginVO);
-        // 设置菜单
-        loginVO.setMenus(menuService.getMenus(user.getId()));
         // 设置权限
         loginVO.setResources(resourceService.getResources(user.getId()));
         return tokenService.createToken(loginVO);
     }
 
-    @Override
-    public List<MenuTreeVO> getMenuTree() {
-        // 获取当前用户
-        Long currentUserId = UserContext.getCurrentUserId();
-        // 查询当前用户所有菜单
-        LoginVO currentUser = tokenService.getCurrentUser(currentUserId);
-        List<Menu> menus = currentUser.getMenus();
-        return TreeUtils.buildTreeWithConversion(
-                menus,
-                MenuTreeVO.class,
-                MenuTreeVO::getId,
-                MenuTreeVO::getParentId,
-                menuTreeVO -> {
-                    List<MenuTreeVO> children = menuTreeVO.getChildren();
-                    if (children == null) {
-                        children = new ArrayList<>();
-                        menuTreeVO.setChildren(children);
-                    }
-                    return children;
-                }
-        );
-    }
 
     /**
      * 登录前置校验

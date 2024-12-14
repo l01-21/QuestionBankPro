@@ -13,7 +13,6 @@ token:
   # 令牌有效期（默认7天）
   expireTime: 604800
 
-
 secure:
   ignored:
     urls:

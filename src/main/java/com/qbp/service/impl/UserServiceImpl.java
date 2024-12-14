@@ -1,15 +1,11 @@
 package com.qbp.service.impl;
 
 import com.qbp.constant.UserConstants;
-import com.qbp.model.entity.Menu;
-import com.qbp.model.entity.Resource;
 import com.qbp.model.entity.User;
 import com.qbp.mapper.UserMapper;
 import com.qbp.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 用户表 服务实现类

@@ -8,11 +8,9 @@ import com.qbp.model.entity.Resource;
 import com.qbp.model.vo.PageResult;
 import com.qbp.model.vo.Result;
 import com.qbp.service.ResourceService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import javax.websocket.server.PathParam;
 
 /**
  * 权限资源表 前端控制器
@@ -36,6 +34,29 @@ public class ResourceController {
                         .like(name != null, Resource::getName, name)
         );
         return new PageResult<Resource>(page);
+    }
+
+    @GetMapping(value = "/{id}", name = "根据id查询资源")
+    public Result getById(@PathVariable("id") Long id) {
+        return Result.success(resourceService.getById(id));
+    }
+
+    @PutMapping(value = "", name = "修改资源")
+    public Result update(@RequestBody Resource resource) {
+        resourceService.updateById(resource);
+        return Result.success();
+    }
+
+    @PostMapping(value = "", name = "添加资源")
+    public Result add(@RequestBody Resource resource) {
+        resourceService.save(resource);
+        return Result.success();
+    }
+
+    @DeleteMapping(value = "/{id}", name = "删除资源")
+    public Result delete(@PathVariable("id") Long id) {
+        resourceService.deleteResourceById(id);
+        return Result.success();
     }
 }
 

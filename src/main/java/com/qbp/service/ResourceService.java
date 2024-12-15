@@ -19,4 +19,10 @@ public interface ResourceService extends IService<Resource> {
      * @return 资源列表
      */
     List<Resource> getResources(Long id);
+
+    /**
+     * 根据id删除资源
+     * @param id 资源id
+     */
+    void deleteResourceById(Long id);
 }

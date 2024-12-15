@@ -23,9 +23,10 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
 
     @javax.annotation.Resource
     private RoleResourceRelationService roleResourceRelationService;
+
     @Override
-    public List<Resource> getResources(Long id) {
-        return baseMapper.getResources(id);
+    public List<Resource> getResourcesByUserId(Long id) {
+        return baseMapper.getResourcesByUserId(id);
     }
 
     @Override
@@ -38,6 +39,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         if (!list.isEmpty()) {
             Asserts.fail("该资源已分配角色，无法删除");
         }
+
         baseMapper.deleteById(id);
+    }
+
+    @Override
+    public List<Resource> getResourcesByRoleId(Long roleId) {
+        return baseMapper.getResourcesByRoleId(roleId);
     }
 }

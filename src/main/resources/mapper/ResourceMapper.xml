@@ -9,11 +9,17 @@
         <result column="url" property="url"/>
         <result column="description" property="description"/>
     </resultMap>
-    <select id="getResources" resultMap="BaseResultMap">
+    <select id="getResourcesByUserId" resultMap="BaseResultMap">
         SELECT r.id, r.name, r.url, r.description
         FROM resource r
                  JOIN role_resource_relation rrr ON r.id = rrr.resource_id
                  JOIN user_role_relation urr ON rrr.role_id = urr.role_id
         WHERE urr.user_id = #{id};
+    </select>
+    <select id="getResourcesByRoleId" resultType="com.qbp.model.entity.Resource">
+        SELECT r.id, r.name, r.url, r.description
+        FROM resource r
+                 JOIN role_resource_relation rrr ON r.id = rrr.resource_id
+        WHERE rrr.role_id = #{id};
     </select>
 </mapper>

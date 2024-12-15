@@ -11,4 +11,22 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * 根据id删除角色
+     * @param id id
+     */
+    void deleteRoleById(Long id);
+
+    /**
+     * 启用/禁用状态
+     * @param id id
+     */
+    void updateStatus(Long id);
+
+    /**
+     * 分配资源
+     * @param roleId 角色id
+     * @param resourceIds 资源ids
+     */
+    void assignResource(Long roleId, Long[] resourceIds);
 }

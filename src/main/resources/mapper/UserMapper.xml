@@ -14,6 +14,7 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <result column="status" property="status"/>
+        <result column="del_flag" property="delFlag"/>
     </resultMap>
     <select id="checkUserNameUnique" resultType="com.qbp.model.entity.User">
         select id, username

@@ -15,14 +15,21 @@ public interface ResourceService extends IService<Resource> {
 
     /**
      * 根据用户id获取资源
-     * @param id 用户id
+     * @param userId 用户id
      * @return 资源列表
      */
-    List<Resource> getResources(Long id);
+    List<Resource> getResourcesByUserId(Long userId);
 
     /**
      * 根据id删除资源
      * @param id 资源id
      */
     void deleteResourceById(Long id);
+
+    /**
+     * 根据角色id获取资源
+     * @param roleId 角色id
+     * @return 资源列表
+     */
+    List<Resource> getResourcesByRoleId(Long roleId);
 }

@@ -36,9 +36,13 @@ public class Role implements Serializable {
     private String description;
 
     /**
-     * 状态（0：启用，1：禁用，2：删除）
+     * 状态（0：启用，1：禁用）
      */
-    private Boolean status;
+    private Integer status;
 
+    /**
+     * 删除标志（0：代表存在，2：代表删除）
+     */
+    private Integer delFlag;
 
 }

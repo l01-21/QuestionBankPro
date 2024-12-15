@@ -1,6 +1,6 @@
 package com.qbp.enums;
 
-public enum UserStatus {
+public enum CommonStatus {
     OK(0,"正常"),
     DISABLE(1,"停用"),
 
@@ -9,7 +9,7 @@ public enum UserStatus {
     private final Integer code;
     private final String info;
 
-    UserStatus(Integer code, String info) {
+    CommonStatus(Integer code, String info) {
         this.code = code;
         this.info = info;
     }

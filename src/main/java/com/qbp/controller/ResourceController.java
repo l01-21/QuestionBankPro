@@ -10,7 +10,6 @@ import com.qbp.model.vo.Result;
 import com.qbp.service.ResourceService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 
 /**
  * 权限资源表 前端控制器
@@ -57,6 +56,16 @@ public class ResourceController {
     public Result delete(@PathVariable("id") Long id) {
         resourceService.deleteResourceById(id);
         return Result.success();
+    }
+
+    @GetMapping(value = "/getByRole", name = "根据角色获取资源")
+    public Result getByRole(@RequestParam("roleId") Long roleId) {
+        return Result.success(resourceService.getResourcesByRoleId(roleId));
+    }
+
+    @GetMapping(value = "", name = "获取所有资源")
+    public Result getAll() {
+        return Result.success(resourceService.list());
     }
 }
 

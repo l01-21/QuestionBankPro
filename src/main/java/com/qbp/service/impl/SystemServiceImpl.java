@@ -4,8 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.qbp.constant.CacheConstants;
 import com.qbp.constant.Constants;
 import com.qbp.constant.UserConstants;
-import com.qbp.context.UserContext;
-import com.qbp.enums.UserStatus;
+import com.qbp.enums.CommonStatus;
 import com.qbp.exception.Asserts;
 import com.qbp.model.dto.RegisterDTO;
 import com.qbp.model.entity.User;
@@ -15,7 +14,6 @@ import com.qbp.service.ResourceService;
 import com.qbp.service.SystemService;
 import com.qbp.service.UserService;
 import com.qbp.utils.RedisCacheUtils;
-import com.qbp.utils.TreeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,9 +24,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -113,19 +109,19 @@ public class SystemServiceImpl implements SystemService {
         // 登录前置校验
         loginPreCheck(username, password);
         // 用户校验
-        User user = userService.lambdaQuery().eq(User::getUsername, username).eq(User::getDelFlag, UserStatus.OK.getCode()).one();
+        User user = userService.lambdaQuery().eq(User::getUsername, username).eq(User::getDelFlag, CommonStatus.OK.getCode()).one();
         // 校验密码
         if (!passwordEncoder.matches(password, user.getPassword())) {
             Asserts.fail("用户名或密码错误");
         }
         // 校验是否可用
-        if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        if (CommonStatus.DISABLE.getCode().equals(user.getStatus())) {
             Asserts.fail("账号已停用");
         }
         LoginVO loginVO = new LoginVO();
         BeanUtils.copyProperties(user, loginVO);
         // 设置权限
-        loginVO.setResources(resourceService.getResources(user.getId()));
+        loginVO.setResources(resourceService.getResourcesByUserId(user.getId()));
         return tokenService.createToken(loginVO);
     }
 
